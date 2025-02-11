@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "eu.efficientsoft.lpl.ssmoke.mobileapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "eu.efficientsoft.lpl.ssmoke.mobileapp"
