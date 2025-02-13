@@ -31,15 +31,6 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Devices
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Events
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Help
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Home
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Login
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Notifications
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Profile
-import eu.efficientsoft.lpl.ssmoke.mobileapp.Settings
 import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.theme.LPLBlue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -112,7 +103,7 @@ fun SSmokeDrawer (drawerState: DrawerState, scope: CoroutineScope) {
             }
         },
         content = {
-            SSmokeApp(modifier = Modifier.padding(10.dp), pageRoute = pageRoute.value)
+            SSmokeApp(pageRoute = pageRoute.value)
             Log.i("NAV CONTROLLER.CONTENT", pageRoute.value.toString())
 //            navController.navigate(pageRoute.value)
 //             Surface {
