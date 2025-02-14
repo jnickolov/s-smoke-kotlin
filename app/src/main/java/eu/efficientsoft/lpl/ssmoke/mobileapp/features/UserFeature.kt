@@ -125,7 +125,6 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.widgets.PasswordField
 
         //Preferrer language
 
-
         // Action
         Spacer(Modifier.height(8.dp))
         ElevatedButton(onClick = { /*TODO*/ }) {
