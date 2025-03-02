@@ -46,13 +46,11 @@ object Help
 @Serializable
 object NewAccount
 
-
 @Composable
 fun SSmokeApp() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val pageRoute: MutableState<Any> = remember { mutableStateOf (Home) }
-
 
     Scaffold (
         topBar = { SSmokeTopBar (
