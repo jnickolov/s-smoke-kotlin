@@ -12,6 +12,6 @@ import androidx.compose.ui.Modifier
 @Composable fun HomeScreen () {
     Log.i("Home Screen", "Box")
     Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Text("Home Screen")
+        Text("SSMOKE Home Screen")
     }
 }

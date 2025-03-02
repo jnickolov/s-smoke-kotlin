@@ -18,9 +18,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,8 +29,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.theme.LPLBlue
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 private data class NavigationData (val id: Any, val label: String, val description: String? = null, val icon: Icon? = null, var selected: Boolean = false, val onClick: () -> Unit = {})
 
@@ -54,12 +49,11 @@ private val navItems = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-//private fun SSmokeDrawerItemLabel(nav: NavigationData) : AnnotatedString {
 private fun SSmokeDrawerItemLabel(nav: NavigationData) {
     val hintFontSize = LocalTextStyle.current.fontSize * 0.7
     val titleFontSize = LocalTextStyle.current.fontSize * 1.0
 
-    val descr = nav.description ?: "";
+    val descr = nav.description ?: ""
     val s = buildAnnotatedString {
         withStyle(
             style = ParagraphStyle(
@@ -85,41 +79,30 @@ private fun SSmokeDrawerItemLabel(nav: NavigationData) {
             }
         }
     }
-    Text (text = s) // ne pomaga: Modifier.height(IntrinsicSize.Max))
-    //Text(nav.label)
+    Text (text = s)
 }
 
 @Composable
-fun SSmokeDrawer (drawerState: DrawerState, scope: CoroutineScope) {
-    val pageRoute: MutableState<Any> = remember { mutableStateOf (Home) }
+fun SSmokeDrawer (
+    drawerState: DrawerState,
+    onSelect: (navId: Any) -> Unit,
+    content: @Composable () -> Unit,
+) {
 
-    //var selectedItem by remember { mutableStateOf(navItems[0]) }
     ModalNavigationDrawer(
-        modifier = Modifier.padding(0.dp, 64.dp, 0.dp, 0.dp),
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                SSmokeDrawerSheet(drawerState, scope, pageRoute)
+                SSmokeDrawerSheet(onSelect)
             }
         },
-        content = {
-            SSmokeApp(pageRoute = pageRoute.value)
-            Log.i("NAV CONTROLLER.CONTENT", pageRoute.value.toString())
-//            navController.navigate(pageRoute.value)
-//             Surface {
-//                 Text("GOGOGO")
-//             }
-        }
+        content = content
     )
 }
 
 @Composable
 private fun SSmokeDrawerSheet(
-    //selectedItem: NavigationData?,
-    //navController: NavHostController,
-    drawerState: DrawerState?,
-    scope: CoroutineScope?,
-    pageRoute: MutableState<Any>,
+    onClick: (navId: Any) -> Unit
 ) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -132,30 +115,13 @@ private fun SSmokeDrawerSheet(
             if (it == null) {
                 Divider(thickness = 1.dp, modifier = Modifier.padding(0.dp, 10.dp))
             } else {
-                //val lbl = () -> SSmokeDrawerItemLabel(it);
                 NavigationDrawerItem(
-                    // ne pomaga modifier = Modifier.height(IntrinsicSize.Max),
-                    //label = { Text(text = SSmokeDrawerItemLabel(it), minLines = 2, maxLines = 4) },
                     label = { SSmokeDrawerItemLabel(it) },
                     selected = false,
-                    onClick = {
-                        Log.i("try to navigate", it.id.toString())
-                        //selectedItem?.selected = false;
-                        //it.selected = true
-                        scope?.launch {drawerState?.close()}
-                        //it.onClick()
-                        //navController.navigate(it.id)
-                        pageRoute.value = it.id
-                    }
+                    onClick = {onClick (it.id)}
                 )
             }
         }
     }
-}
-
-@Composable
-fun testDrawerSheet () {
-    //SSmokeDrawerSheet(null, null, null)
-    SSmokeDrawerItemLabel(nav = navItems[0]!!)
 }
 
