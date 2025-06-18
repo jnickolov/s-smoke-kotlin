@@ -1,6 +1,6 @@
-package eu.efficientsoft.lpl.ssmoke.mobileapp.data
+package eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used
 
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.model.LoggedInUser
+import eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used.model_not_used.LoggedInUser
 
 /**
  * Class that requests authentication and user information from the remote data source and

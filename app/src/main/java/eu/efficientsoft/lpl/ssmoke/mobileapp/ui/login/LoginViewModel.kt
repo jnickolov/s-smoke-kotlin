@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.LoginRepository
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.Result
+import eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used.LoginRepository
+import eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used.Result
 
 import eu.efficientsoft.lpl.ssmoke.mobileapp.R
 

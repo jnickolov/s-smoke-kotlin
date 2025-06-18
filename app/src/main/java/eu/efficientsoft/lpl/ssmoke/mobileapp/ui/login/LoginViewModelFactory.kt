@@ -2,8 +2,8 @@ package eu.efficientsoft.lpl.ssmoke.mobileapp.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.LoginDataSource
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.LoginRepository
+import eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used.LoginDataSource
+import eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

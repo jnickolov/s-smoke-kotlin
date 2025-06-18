@@ -1,4 +1,4 @@
-package eu.efficientsoft.lpl.ssmoke.mobileapp.data.model
+package eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used.model_not_used
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

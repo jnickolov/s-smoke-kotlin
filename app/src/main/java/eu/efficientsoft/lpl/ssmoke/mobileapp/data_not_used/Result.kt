@@ -1,4 +1,4 @@
-package eu.efficientsoft.lpl.ssmoke.mobileapp.data
+package eu.efficientsoft.lpl.ssmoke.mobileapp.data_not_used
 
 /**
  * A generic class that holds a value with its loading status.

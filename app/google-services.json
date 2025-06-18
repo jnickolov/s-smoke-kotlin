@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "763360417554",
+    "project_id": "fir-smoke-test",
+    "storage_bucket": "fir-smoke-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763360417554:android:870b0c7f1eae296f7905cb",
+        "android_client_info": {
+          "package_name": "com.companyname.smokeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiBjcX88OYlu4OdgvPNOT-UhXJezgo1W4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763360417554:android:cac34bcb704e0e887905cb",
+        "android_client_info": {
+          "package_name": "eu.efficientsoft.lpl.ssmoke.mobileapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiBjcX88OYlu4OdgvPNOT-UhXJezgo1W4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

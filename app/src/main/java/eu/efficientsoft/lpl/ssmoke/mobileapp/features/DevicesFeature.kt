@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable fun DevicesScreen () {
+    
     Surface (modifier = Modifier.fillMaxSize()){
         Log.i("Home screen", "Surface")
         Text("Devices Screen")
