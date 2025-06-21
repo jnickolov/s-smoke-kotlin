@@ -18,7 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-@Composable fun HomeScreen (i18n: I18n?, changeI18n: (code: String)-> Unit) {
+@Composable fun HomeScreen (changeI18n: (code: String)-> Unit) {
+
     Log.i("Home Screen", "Box")
 
     Column (
@@ -28,7 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = i18n?.prop("m_mnu_detector")?:"NEMA TAKOVA")
+        //Text(text = i18n?.prop("m_mnu_detector")?:"NEMA TAKOVA")
         Button(onClick = {
             //viewModel.loadI18n("bg")
             changeI18n("bg")

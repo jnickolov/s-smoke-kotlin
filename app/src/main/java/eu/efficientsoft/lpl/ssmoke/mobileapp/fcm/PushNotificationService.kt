@@ -12,6 +12,9 @@ class PushNotificationService : FirebaseMessagingService () {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.v("FCM", "Message: ${message.data["from"]}")
+        Log.v("FCM", "Message from: ${message.from}")
+        message.notification?.let {
+            Log.v("FCM", "Message body: ${it.body}")
+        }
     }
 }

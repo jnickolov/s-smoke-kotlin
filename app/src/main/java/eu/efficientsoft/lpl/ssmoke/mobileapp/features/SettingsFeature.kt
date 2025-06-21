@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-@Composable fun SettingsScreen () {
+@Composable fun SettingsScreen(i18n: I18n?) {
     Surface (modifier = Modifier.fillMaxSize()){
         Text("Settings Screen")
     }

@@ -1,6 +1,5 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.features
 
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.SSmokeDAO
 import kotlinx.serialization.Serializable
 
 @Serializable

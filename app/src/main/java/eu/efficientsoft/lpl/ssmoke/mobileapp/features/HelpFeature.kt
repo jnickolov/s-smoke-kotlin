@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-@Composable fun HelpScreen () {
+@Composable fun HelpScreen(i18n: I18n?) {
     Surface (modifier = Modifier.fillMaxSize()){
         Text("Help Screen")
     }

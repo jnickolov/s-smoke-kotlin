@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,7 +36,7 @@ data class LoginResponseDAO (
 
 @Composable
 fun LoginScreen (i18n: I18n?,
-                 onEvent: onEvent
+                 onLogin: ()->Unit,
     onNewAccount: () -> Unit) {
     var userName by remember { mutableStateOf("") }
     var pass by remember { mutableStateOf("") }
@@ -55,40 +56,17 @@ fun LoginScreen (i18n: I18n?,
         Spacer(modifier = Modifier.height(16.dp))
         PasswordField (modifier = Modifier, password = pass, onChange = { pass = it })
         Spacer(modifier = Modifier.height(16.dp))
-        /*
-               CheckedTextEdit(
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .padding(8.dp),
-                   text = userName,
-                   onTextChanged = { userName = it },
-                   hint = "4 to 15 chars, latin letters, digits, symbols . _ -",
-                   checkValue = { if (userName.length in 4..8) HintStatus.OK else HintStatus.ERROR },
-                   label = "Enter user name",
-                   //description = "NOTE: user name cannot be changed!"
-               )
-               CheckedTextEdit(
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .padding(20.dp),
-                   text = pass,
-                   onTextChanged = { pass = it },
-                   hint = "6 to 15 chars, avoid symbols \"+</\\>\"",
-                   checkValue = { if (pass.length in 6..15) HintStatus.OK else HintStatus.ERROR },
-                   label = "Enter user password",
-                   description = "Password can be changed later"
-               )
-       */
+
         ElevatedButton(onClick = { /*TODO*/ }) {
             Text(text = " Login ")
         }
 
-        Divider(modifier = Modifier.padding(16.dp))
+        HorizontalDivider(modifier = Modifier.padding(16.dp))
 
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = { onLogin() }) {
                 Text("Forgot password?")
             }
             TextButton(onClick = {

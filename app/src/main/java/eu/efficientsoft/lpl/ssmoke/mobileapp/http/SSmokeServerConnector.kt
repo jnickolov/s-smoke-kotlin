@@ -1,7 +1,7 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.http
 
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.SSmokeDAO
-import eu.efficientsoft.lpl.ssmoke.mobileapp.sSmokeCoroutineScope
+import android.util.Log
+import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.AppSettings.sSmokeCoroutineScope
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.Result
 import io.ktor.client.HttpClient
@@ -19,12 +19,16 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.network.UnresolvedAddressException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 private const val serverUrl: String = "http://s-smoke.com:8088"
-private const val mobileApiPath: String = "api/m/v1"
+private const val mobileApiPath: String = "/api/m/v1"
+
 
 
 
@@ -32,44 +36,55 @@ val serverConnector = SSmokeServerConnection()
 
 class SSmokeServerConnection {
     val httpClient = createHttpClient()
+    val emptyBody = object  {};
 
     var accessToken = "s-smoke"
 
-    inline fun <reified T>get (url: String, request: SSmokeDAO.SSmokeRequestDAO<T>): Result<T, NetworkError> {
-        //val result: T
+    suspend fun getI18n (
+        lang: String,
+        onSuccess: (status: Int, i18n: I18n) -> Unit) {
 
-        var result: Result<T, NetworkError> = Result.Error(NetworkError.UNKNOWN)
-
-        sSmokeCoroutineScope.launch {
-            result = try {
+            Log.v("CONNECTOR: ","INSIDE LAUNCH")
+            try {
                 val response = httpClient.get(
-                    urlString = url
-
+                    urlString = serverUrl+mobileApiPath+"/i18n/"+lang
                 ) {
                     setAttributes {
                         bearerAuth(accessToken)
                     }
-                    setBody (request.data)
                 }
-
+                Log.v("HTTP:GET", "finished")
                 // update accessToken for next call
-                accessToken = response.headers.get("X-Ssmoke-Token") ?: "s-smoke"
+                accessToken = response.headers["X-Ssmoke-Token"] ?: "s-smoke"
 
                 when (response.status.value) {
-                    in 200..299 -> Result.Success(response.body<T>())
-                    401 -> Result.Error(NetworkError.UNAUTHORIZED)
-                    else -> Result.Error(NetworkError.BAD_REQUEST)
+                    in 200..299 -> {
+                        //Result.Success(response.body())
+                        onSuccess(response.status.value, response.body())
+                    }
+                    //401 -> onError(401)//Result.Error(NetworkError.UNAUTHORIZED)
+                    else -> onError(response.status.value)//Result.Error(NetworkError.BAD_REQUEST)
                 }
 
             } catch (e: InterruptedException) {
                 throw e
             } catch (e: UnresolvedAddressException) {
                 Result.Error(NetworkError.NO_INTERNET)
+                // TODO:
             } catch (e: SerializationException) {
+                // TODO
+                onError(500)
                 Result.Error(NetworkError.SERIALIZATION)
             }
+        //}  // end launch
+    }
+
+    fun onError(status: Int) {
+        if (status == 401) {
+            Log.v("HTTP", "Must re-login")
+        } else {
+            Log.v("HTTP", "ERROR, status $status")
         }
-        return result
     }
 
     //val httpClient = serverConnector.httpClient
@@ -128,4 +143,8 @@ class SSmokeServerConnection {
             }
         }
     }
+//
+//    fun loadI18n (langCode: String, action: (Result<I18n, NetworkError>) -> Unit) {
+//
+//    }
 }

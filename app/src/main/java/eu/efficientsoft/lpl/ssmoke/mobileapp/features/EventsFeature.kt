@@ -26,7 +26,7 @@ data class SSmokeEvent (val timestamp: Date, val name: String, val missed: Boole
     val isNormal = ! hasAlarm
 }
 
-val data = mutableStateListOf<SSmokeEvent>(
+private val data = mutableStateListOf<SSmokeEvent>(
     SSmokeEvent(Date(2024, 10, 13, 12, 35, 10), "Кухня", false, false, 36.0, 2.89),
     SSmokeEvent(Date(2024, 10, 14, 12, 35, 20), "Таван", true, false, 36.0, 2.89),
     SSmokeEvent(Date(2024, 11, 15, 12, 35, 30), "Гараж", false, true, 36.0, 2.89),
@@ -144,7 +144,7 @@ fun ClosedEventCard (e: SSmokeEvent) {
     }
 }
 
-@Composable fun EventsScreen () {
+@Composable fun EventsScreen(i18n: I18n?) {
     val eventState = remember { data }
 
     Column(modifier = Modifier.padding(16.dp)) {

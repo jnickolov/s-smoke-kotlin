@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -26,10 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.FontScaling
 import androidx.compose.ui.unit.dp
 
-@Composable fun NotificationsScreen () {
+@Composable fun NotificationsScreen(i18n: I18n?) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             modifier = Modifier.padding(16.dp).fillMaxWidth(),
@@ -67,7 +66,7 @@ import androidx.compose.ui.unit.dp
             )
         }
 
-        Divider(thickness = 1.dp, color = Color.LightGray)
+        HorizontalDivider(Modifier.fillMaxWidth(), thickness = 1.dp, color = Color.LightGray)
 
         /////////////////////////////////
         Row (

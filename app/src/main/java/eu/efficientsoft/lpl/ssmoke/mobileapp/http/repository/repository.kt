@@ -1,32 +1,33 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.http.repository
 
 import android.util.Log
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.SSmokeRequestDao
-import eu.efficientsoft.lpl.ssmoke.mobileapp.data.SSmokeResponseDao
 import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
 import eu.efficientsoft.lpl.ssmoke.mobileapp.http.serverConnector
-import eu.efficientsoft.lpl.ssmoke.mobileapp.util.Result
 
-class I18nRepository() {
+object I18nRepository {
     //private val i18nEndpoint = "$mobileApiUrl/i18n"
-    private val i18nEndpoint = "/i18n"
+    private const val i18nEndpoint = "/i18n"
 
-
-
-
-    fun loadI18n (
+    suspend fun loadI18n (
         lang: String,
         action: (i18n: I18n) -> Unit
     ) {
-
-        val result = serverConnector.get<I18nResponseDao>(url = "$i18nEndpoint/$lang", request = I18nRequestDAO(lang))
-        when (result) {
-            is Result.Success -> action (result.data.i18n)
-            is Result.Error -> {
-                Log.i("I18nRepository::loadi18n", "Error: ${result.error.name}")
-                // TODO
+        Log.v("I18N", "Loading........ lang = $lang")
+        serverConnector.getI18n (lang)  { status, res ->
+                Log.v("I18nREPO", "loading status: $status")
+                if (status == 200)
+                    action (res)
             }
+
         }
+//        val result = serverConnector.get<I18nResponseDao>(url = "$i18nEndpoint/$lang", request = I18nRequestDao(lang))
+//        when (result) {
+//            is Result.Success -> action (result.data.i18n)on
+//            is Result.Error -> {
+//                Log.i("I18nRepository::loadi18n", "Error: ${result.error.name}")
+//                // TODO
+//            }
+//        }
         //val httpClient = serverConnector.httpClient
 
 //        sSmokeCoroutineScope.launch {
@@ -54,9 +55,6 @@ class I18nRepository() {
 //                action(result)
 //            }
 //        }
-    }
+//    }
 
 }
-
-typealias I18nRequestDao = SSmokeRequestDao<String>
-typealias I18nResponseDao = SSmokeResponseDao<I18n>

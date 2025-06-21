@@ -7,6 +7,8 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.util.AppSettings
 
 internal const val dataStoreFileName = "ssmoke_pro.preferences_pb"
 
+lateinit var dataStoreRepository: DataStoreRepository
+
 
 fun createDataStore(context: Context): DataStore<Preferences> {
     return AppSettings.getDataStore(
