@@ -2,7 +2,6 @@ package eu.efficientsoft.lpl.ssmoke.mobileapp.http
 
 import android.util.Log
 import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
-import eu.efficientsoft.lpl.ssmoke.mobileapp.util.AppSettings.sSmokeCoroutineScope
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -14,15 +13,10 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
-import io.ktor.client.request.setBody
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.network.UnresolvedAddressException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
@@ -36,7 +30,6 @@ val serverConnector = SSmokeServerConnection()
 
 class SSmokeServerConnection {
     val httpClient = createHttpClient()
-    val emptyBody = object  {};
 
     var accessToken = "s-smoke"
 

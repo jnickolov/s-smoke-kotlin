@@ -110,14 +110,14 @@ fun SSmokeApp() {
     }
 
     NavHost(navController = navController, startDestination = Events) {
-        //composable<Home> { HomeScreen(changeI18n = action) }
+        composable<Home> { HomeScreen(changeI18n = action) }
         composable<Devices> { DevicesScreen(i18n = i18n) }
         composable<Notifications> { NotificationsScreen(i18n = i18n) }
         composable<Events> { EventsScreen(i18n = i18n) }
         composable<Settings> { SettingsScreen(i18n = i18n) }
         composable<Help> { HelpScreen(i18n = i18n) }
-//        composable<Login> { LoginScreen(i18n = i18n, onLogin = {},
-//            onNewAccount = { navController.navigate(NewAccount) }) }
+        composable<Login> { LoginScreen(i18n = i18n, onLogin = {},
+            onNewAccount = { navController.navigate(NewAccount) }) }
         composable<Profile> { UserProfileScreen(i18n = i18n) }
         composable<NewAccount> { NewAccountScreen(i18n = i18n) }
     }

@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
          dataStoreRepository = DataStoreRepository (createDataStore(this))
 
 
-        Firebase.messaging.subscribeToTopic("gogo-common")
+        Firebase.messaging.subscribeToTopic("test-alarm")
             .addOnCompleteListener{ task ->
                 val msg = if(task.isSuccessful) "Subscribed" else "Subscription failed"
                 Log.v("FCM", msg)
