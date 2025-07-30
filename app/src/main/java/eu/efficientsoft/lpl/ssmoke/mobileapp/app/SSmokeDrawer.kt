@@ -17,7 +17,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +27,7 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
+import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.I18n
 import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.theme.LPLBlue
 
 private data class NavigationData (val id: Any, val label: String, val description: String? = null, val icon: Icon? = null, var selected: Boolean = false, val onClick: () -> Unit = {})
@@ -37,13 +36,13 @@ private data class NavigationData (val id: Any, val label: String, val descripti
 private val navItems = listOf(
     NavigationData (Events, label = "m_mnu_reports", description = "m_mnu_reports_hint", onClick = { Log.i("Navigation click","Events"); }),
     //null,
-    NavigationData (Devices, label = "m_mnu_detector", description = "m_mnu_detector_hint", onClick = { Log.i("Navigation click","Detectors")}),
+    //NavigationData (Devices, label = "m_mnu_detector", description = "m_mnu_detector_hint", onClick = { Log.i("Navigation click","Detectors")}),
     NavigationData (Notifications, label = "m_mnu_fcm", description = "m_mnu_fcm_hint", onClick = { Log.i("Navigation click","Messages")}),
     //null,
-    NavigationData (Profile, label = "m_mnu_user", description = "m_mnu_user_hint", onClick = { Log.i("Navigation click","Profile")}),
-    NavigationData (Settings, label = "m_mnu_config", description = "m_mnu_config_hint", onClick = { Log.i("Navigation click","Profile")}),
+    //NavigationData (Profile, label = "m_mnu_user", description = "m_mnu_user_hint", onClick = { Log.i("Navigation click","Profile")}),
+    //NavigationData (Settings, label = "m_mnu_config", description = "m_mnu_config_hint", onClick = { Log.i("Navigation click","Profile")}),
     //null,
-    NavigationData (Help, label = "m_mnu_help", description = "m_mnu_help_hint", onClick = { Log.i("Navigation click","Help") }),
+    //NavigationData (Help, label = "m_mnu_help", description = "m_mnu_help_hint", onClick = { Log.i("Navigation click","Help") }),
     //null,
     NavigationData (Login, label = "m_mnu_logout", description = "m_mnu_logout_hint", onClick = {}),
 )
@@ -119,15 +118,11 @@ private fun SSmokeDrawerSheet(
     ) {
         Spacer(Modifier.height(12.dp))
         navItems.forEach {
-            if (it == null) {
-                HorizontalDivider(modifier = Modifier.padding(0.dp, 10.dp), thickness = 1.dp)
-            } else {
-                NavigationDrawerItem(
-                    label = { SSmokeDrawerItemLabel(i18n = i18n, nav = it) },
-                    selected = false,
-                    onClick = {onClick (it.id)}
-                )
-            }
+            NavigationDrawerItem(
+                label = { SSmokeDrawerItemLabel(i18n = i18n, nav = it) },
+                selected = false,
+                onClick = {onClick (it.id)}
+            )
         }
     }
 }

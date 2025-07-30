@@ -1,35 +1,21 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.http
 
 import android.util.Log
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
+import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.I18n
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.Result
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.okhttp.OkHttpConfig
-import io.ktor.client.engine.okhttp.OkHttpEngine
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
-import io.ktor.http.URLProtocol
-import io.ktor.http.path
-import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
 
-private const val serverUrl: String = "http://s-smoke.com:8088"
-private const val mobileApiPath: String = "/api/m/v1"
+//private const val serverUrl: String = "http://s-smoke.com:8088"
 
 
 
 
-val serverConnector = SSmokeServerConnection()
-
-class SSmokeServerConnection {
-    val httpClient = createHttpClient()
+class I18nHttpConnector : SSmokeHttpClientBase () {
+    //val httpClient = createHttpClient()
 
     var accessToken = "s-smoke"
 
@@ -40,7 +26,7 @@ class SSmokeServerConnection {
             Log.v("CONNECTOR: ","INSIDE LAUNCH")
             try {
                 val response = httpClient.get(
-                    urlString = serverUrl+mobileApiPath+"/i18n/"+lang
+                    urlString = "$serverHost$i18nPath/$lang"
                 ) {
                     setAttributes {
                         bearerAuth(accessToken)
@@ -110,32 +96,6 @@ class SSmokeServerConnection {
 
 
 
-
-
-
-    private fun createHttpClient (): HttpClient {
-        val engine = OkHttpEngine(OkHttpConfig())
-        return HttpClient (engine) {
-            defaultRequest {
-                url {
-                    protocol = URLProtocol.HTTP
-                    host = serverUrl
-                    path(mobileApiPath)
-                }
-                //header("Autorization", "Bearer $accessToken")
-            }
-            install (Logging) {
-                level = LogLevel.ALL
-            }
-            install (ContentNegotiation) {
-                json(
-                    json = Json {
-                        ignoreUnknownKeys = true
-                    }
-                )
-            }
-        }
-    }
 //
 //    fun loadI18n (langCode: String, action: (Result<I18n, NetworkError>) -> Unit) {
 //

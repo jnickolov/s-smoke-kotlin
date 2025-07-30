@@ -7,8 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.efficientsoft.lpl.ssmoke.mobileapp.data.dataStoreRepository
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
-import eu.efficientsoft.lpl.ssmoke.mobileapp.http.repository.I18nRepository
+import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.I18n
+import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.i18nBg_preloaded
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,9 +43,12 @@ class SSmokeI18nViewModel(): ViewModel(), SSmokeVMKeys  {
     }
 
     fun loadI18n (langCode: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            I18nRepository.loadI18n(langCode, ::setI18n)
-        }
+        // TODO: load from server
+        Log.v("", "SETING BG PRELOADED LANG")
+        setI18n(i18nBg_preloaded)
+//        viewModelScope.launch(Dispatchers.IO) {
+//            I18nRepository.loadI18n(langCode, ::setI18n)
+//        }
     }
 
     fun saveInBundle (bundle: Bundle) {

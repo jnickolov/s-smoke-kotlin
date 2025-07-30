@@ -2,12 +2,15 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id ("org.jetbrains.kotlin.plugin.serialization")
+
     id("com.google.gms.google-services")
+
 }
 
 android {
     namespace = "eu.efficientsoft.lpl.ssmoke.mobileapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "eu.efficientsoft.lpl.ssmoke.mobileapp"
@@ -32,14 +35,9 @@ android {
             )
         }
     }
+    
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    compilerOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility=JavaVersion.VERSION_21
     }

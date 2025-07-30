@@ -1,7 +1,12 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.app
 
 import android.util.Log
+import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -14,23 +19,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.unit.dp
+import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeEventsViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeI18nViewModel
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.DevicesScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.EventsScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.HelpScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.HomeScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.I18n
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.LoginScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.NewAccountScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.NotificationsScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.SettingsScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.features.UserProfileScreen
-import kotlinx.coroutines.delay
+import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
+import eu.efficientsoft.lpl.ssmoke.mobileapp.util.ToastMessage
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -54,10 +49,13 @@ object Help
 object NewAccount
 
 @Composable
-fun SSmokeApp() {
-    val pageRoute: MutableState<Any> = remember { mutableStateOf (Login) }
+fun SSmokeApp(
+    i18nViewModel: SSmokeI18nViewModel,
+    userViewModel: SSmokeUserViewModel,
+    eventsViewModel: SSmokeEventsViewModel
+    ) {
+    val pageRoute: MutableState<Any> = remember { mutableStateOf(Home) }
 
-    val i18nViewModel = viewModel<SSmokeI18nViewModel>()
     val i18n by i18nViewModel.i18n.collectAsState()
     val lang = i18nViewModel.lang
 
@@ -65,68 +63,57 @@ fun SSmokeApp() {
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(lang) {
-        Log.d("LAUNCH EFFECT", "Lang: $lang, wait 3000")
-        if (lang != null) {
-            //i18nViewModel.saveInDataStore()
-            i18nViewModel.loadI18n(lang)
-        }
+        //Log.d("LAUNCH EFFECT", "Lang: $lang, wait 3000")
+        //TODO: select real language
+//        if (lang != null) {
+//            //i18nViewModel.saveInDataStore()
+//            i18nViewModel.loadI18n(lang)
+//        }
     }
 
-    Scaffold (
-        topBar = { SSmokeTopBar (
-            onMenuClick = {
-                Log.i("Navigation Menu Button", "Opening drawer")
-                scope.launch { drawerState.open() }
-            },
-            onActionClick = {}
-        ) },
+    Scaffold(
+        topBar = {
+            SSmokeTopBar(
+                onMenuClick = {
+                    Log.i("Navigation Menu Button", "Opening drawer")
+                    scope.launch { drawerState.open() }
+                },
+                onActionClick = {}
+            )
+        },
     ) {
-        Surface(modifier = Modifier.padding(it)) {
+        Surface(modifier = Modifier.fillMaxSize().padding(it)) {
             SSmokeDrawer(
                 i18n = i18n,
                 drawerState = drawerState,
                 onSelect = { navId ->
-                    scope.launch {drawerState.close()}
+                    Log.d(
+                        "Drawer navigation:",
+                        "Drawer navigation: id = ${navId}, ${navId.toString()}"
+                    )
+                    scope.launch { drawerState.close() }
                     pageRoute.value = navId
                 }
             ) {
                 //Log.i("SSmokeDrawer---------------", "------------SSmokeDrawer: code = ${i18n?.code}")
                 Log.v("NAV", "navigate to: ${pageRoute.value.toString()}")
 
-                SSmokeNavigationScreen(pageRoute.value, lang, i18n, action = { lng ->
-                    i18nViewModel.loadI18n (lng)
-                })
+                SSmokeNavigationScreen(
+                    route = pageRoute.value,
+                    lang = lang,
+                    i18n = i18n,
+                    i18nViewModel,
+                    userViewModel,
+                    eventsViewModel,
+
+                    { pageRoute.value = it }
+                )
             }
+            ToastMessage(modifier = Modifier.fillMaxWidth().padding(12.dp)
+                //.wrapContentWidth(Alignment.CenterHorizontally)
+                .wrapContentHeight(Alignment.Bottom))
         }
     }
+
 }
 
-@Composable fun SSmokeNavigationScreen (route: Any, lang: String?, i18n: I18n?, action: (String) -> Unit ) {
-    val navController = rememberNavController()
-
-    fun toLoginScreen() {
-        Log.v("NAV", "to login screen")
-        navController.navigate(Login)
-    }
-
-    NavHost(navController = navController, startDestination = Events) {
-        composable<Home> { HomeScreen(changeI18n = action) }
-        composable<Devices> { DevicesScreen(i18n = i18n) }
-        composable<Notifications> { NotificationsScreen(i18n = i18n) }
-        composable<Events> { EventsScreen(i18n = i18n) }
-        composable<Settings> { SettingsScreen(i18n = i18n) }
-        composable<Help> { HelpScreen(i18n = i18n) }
-        composable<Login> { LoginScreen(i18n = i18n, onLogin = {},
-            onNewAccount = { navController.navigate(NewAccount) }) }
-        composable<Profile> { UserProfileScreen(i18n = i18n) }
-        composable<NewAccount> { NewAccountScreen(i18n = i18n) }
-    }
-
-    Log.v("NAV", "Initial navigation: lang = $lang, i18n: ${i18n?.code} or nulllllll")
-    if (lang == null)
-        navController.navigate(Home)
-//    if (route == Home && lang != null)
-//        navController.navigate(Login)
-    else
-        navController.navigate(route)
-}

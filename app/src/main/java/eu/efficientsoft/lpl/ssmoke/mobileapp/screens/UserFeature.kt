@@ -1,4 +1,4 @@
-package eu.efficientsoft.lpl.ssmoke.mobileapp.features
+package eu.efficientsoft.lpl.ssmoke.mobileapp.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
