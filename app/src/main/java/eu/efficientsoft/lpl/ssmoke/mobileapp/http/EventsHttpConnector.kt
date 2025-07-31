@@ -31,26 +31,6 @@ class EventHttpConnector()  : SSmokeHttpClientBase () {
 
         return resolveResult (response.status.value, response.body())
     }
-    //http://localhost:8088/api/pro/detector-naming/v1/infire?user=jojo
-
-    suspend fun loadFireAlarmsForUser (username: String) : Result<List<DetectorGroupNamingDto>, NetworkError> {
-        val response = try {
-            val urlString = "$serverHost$namingPath/infire"
-            httpClient.get(urlString) {
-                header("Authorization", "Bearer s-smoke")
-                header("Content-type", "application/json")
-                parameter("user", username)
-            }
-        } catch (_: UnresolvedAddressException) {
-            return Result.Error(NetworkError.NO_INTERNET)
-        } catch (e: SerializationException) {
-            e.printStackTrace()
-            return Result.Error(NetworkError.SERIALIZATION)
-        }
-
-        return resolveResult (response.status.value, response.body())
-    }
-
 
 }
 
@@ -58,13 +38,5 @@ class EventHttpConnector()  : SSmokeHttpClientBase () {
 data class EventNamingDto (
     val eventName: String,
     val detectorName: String,val sensorName: String,
-    val timestamp: String
-)
-
-@Serializable
-data class DetectorEventReportDto (
-    val eventName: String,
-    val detectorName: String,
-    val sensorName: String,
     val timestamp: String
 )

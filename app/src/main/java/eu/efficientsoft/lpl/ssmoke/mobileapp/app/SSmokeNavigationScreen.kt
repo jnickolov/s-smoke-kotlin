@@ -52,7 +52,7 @@ fun SSmokeNavigationScreen (
     }
 
     NavHost(navController = navController, startDestination = Home) {
-        composable<Home> { HomeScreen(eventsVM = eventsViewModel, userVM = userViewModel) }
+        composable<Home> { HomeScreen(onNavigate = { navigateTo(Events) }) }
         composable<Devices> { DevicesScreen(i18n = i18n) }
         composable<Notifications> { NotificationsScreen(i18n = i18n, userVM = userViewModel,
             onAlarmSelected = { userViewModel.registerForAlarms() },

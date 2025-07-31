@@ -3,7 +3,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,14 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import eu.efficientsoft.lpl.ssmoke.mobileapp.R
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeEventsViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserState
+import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.http.EventNamingDto
 import java.util.Date
 
@@ -160,9 +159,8 @@ fun ClosedEventCard (e: SSmokeEvent) {
     eventsVM: SSmokeEventsViewModel,
     user: SSmokeUserState
 ) {
-    //val events by remember { eventsVM.events }
-    val events by eventsVM.events
-    //val reloadEvents by remember { eventsVM.loadEvents }
+    val events by remember { eventsVM.events }
+    val reloadEvents by remember { eventsVM.loadEvents }
 
     LaunchedEffect(user) {
         user.username?.let {
@@ -176,17 +174,8 @@ fun ClosedEventCard (e: SSmokeEvent) {
         .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
     ) {
-        if (eventsVM.loadingEvents.value) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            events.forEach { e->
-                EventView (e)
-            }
+        events.forEach { e->
+            EventView (e)
         }
     }
 }
