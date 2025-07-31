@@ -2,10 +2,8 @@ package eu.efficientsoft.lpl.ssmoke.mobileapp.domain
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -17,12 +15,11 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.util.onError
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.onSuccess
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.koin.core.context.GlobalContext
 
 @Serializable
 data class SSmokeUserState (
     val username: String? = null,
-    val name: String? = null,
+    val name: String = "",
     val isLogged: Boolean = false,
     //val loginAttemptStatus: Boolean = true
 )
@@ -38,6 +35,9 @@ class SSmokeUserViewModel: ViewModel(), SSmokeVMKeys {
 
     var messageSubscription = mutableStateOf(true);
 
+    fun isUserLogged (): Boolean {
+        return user.isLogged;
+    }
     fun login (username: String, password: String, onSuccessAction: () -> Unit) {
         viewModelScope.launch {
             userHttpConnector.loginAttempt(username, password)
@@ -70,12 +70,13 @@ class SSmokeUserViewModel: ViewModel(), SSmokeVMKeys {
         val newUser: String? = bundle.getString (userKey)
         val newUsername : String? = bundle.getString (usernameKey)
 
-        userState.value = SSmokeUserState (newUsername, newUser, user?.isLogged ?: false)
+        val nm = newUser ?: ""
+        userState.value = SSmokeUserState (newUsername, nm, user.isLogged)
     }
 
     suspend fun loadFromDataStore () {
         dataStoreRepository.loadUser { newUsername, newName ->
-            userState.value = SSmokeUserState (newUsername, newName, user?.isLogged ?: false)
+            userState.value = SSmokeUserState (newUsername, newName, user.isLogged)
         }
     }
 
@@ -83,8 +84,8 @@ class SSmokeUserViewModel: ViewModel(), SSmokeVMKeys {
         Log.v("MVVM", "CVM: Saving value in DataStore : name: ${user.name}, username: ${user.username}")
 
         viewModelScope.launch {
-            if (user != null && user.name != null && user.username != null) {
-                dataStoreRepository.run { saveUser (name = user.name!!, username = user.username!!) }
+            if (user.username != null) {
+                dataStoreRepository.run { saveUser (name = user.name, username = user.username!!) }
             }
         }
     }

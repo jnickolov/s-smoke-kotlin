@@ -22,6 +22,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeEventsViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeI18nViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
@@ -48,11 +50,14 @@ object Help
 @Serializable
 object NewAccount
 
+
 @Composable
 fun SSmokeApp(
+    navController: NavController,
     i18nViewModel: SSmokeI18nViewModel,
     userViewModel: SSmokeUserViewModel,
-    eventsViewModel: SSmokeEventsViewModel
+    eventsViewModel: SSmokeEventsViewModel,
+    onPageSelected: (navController: NavController, page: Any) -> Unit
     ) {
     val pageRoute: MutableState<Any> = remember { mutableStateOf(Home) }
 
@@ -61,6 +66,8 @@ fun SSmokeApp(
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+
 
     LaunchedEffect(lang) {
         //Log.d("LAUNCH EFFECT", "Lang: $lang, wait 3000")
@@ -91,7 +98,10 @@ fun SSmokeApp(
                         "Drawer navigation:",
                         "Drawer navigation: id = ${navId}, ${navId.toString()}"
                     )
-                    scope.launch { drawerState.close() }
+                    scope.launch {
+                        drawerState.close()
+                    }
+                    // TOKA NE STAVA? onPageSelected(navId)
                     pageRoute.value = navId
                 }
             ) {
@@ -99,6 +109,7 @@ fun SSmokeApp(
                 Log.v("NAV", "navigate to: ${pageRoute.value.toString()}")
 
                 SSmokeNavigationScreen(
+                    navController,
                     route = pageRoute.value,
                     lang = lang,
                     i18n = i18n,
@@ -106,7 +117,10 @@ fun SSmokeApp(
                     userViewModel,
                     eventsViewModel,
 
-                    { pageRoute.value = it }
+                    {
+                        pageRoute.value = it;
+                        onPageSelected(navController, it);
+                    }
                 )
             }
             ToastMessage(modifier = Modifier.fillMaxWidth().padding(12.dp)
@@ -116,4 +130,6 @@ fun SSmokeApp(
     }
 
 }
+
+
 

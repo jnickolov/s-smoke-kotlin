@@ -2,6 +2,7 @@ package eu.efficientsoft.lpl.ssmoke.mobileapp.app
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +23,7 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.util.ToastManager
 
 @Composable
 fun SSmokeNavigationScreen (
+    navController: NavController,
     route: Any,
     lang: String?,
     i18n: I18n?,
@@ -31,7 +33,6 @@ fun SSmokeNavigationScreen (
     onRouteChange: (Any) -> Unit
     //loginAttempt: (user: String, pass: String, onSuccess: ()->Unit, onFail: @Composable ()->Unit)->Unit
 ) {
-    val navController = rememberNavController()
 
 //    fun toLoginScreen() {
 //        Log.v("NAV", "to login screen")
@@ -52,7 +53,10 @@ fun SSmokeNavigationScreen (
     }
 
     NavHost(navController = navController, startDestination = Home) {
-        composable<Home> { HomeScreen(onNavigate = { navigateTo(Events) }) }
+        composable<Home> { HomeScreen(
+            userViewModel,
+            onLogin = { navigateTo(Login) })
+        }
         composable<Devices> { DevicesScreen(i18n = i18n) }
         composable<Notifications> { NotificationsScreen(i18n = i18n, userVM = userViewModel,
             onAlarmSelected = { userViewModel.registerForAlarms() },
@@ -60,7 +64,14 @@ fun SSmokeNavigationScreen (
             onMessageSelected = { userViewModel.registerForMessages() },
             onMessageDeselected = { userViewModel.unregisterForMessages() },
             ) }
-        composable<Events> { EventsScreen(i18n = i18n, user = userViewModel.user, eventsVM = eventsViewModel) }
+        composable<Events> { EventsScreen(
+            i18n = i18n,
+            eventsVM = eventsViewModel,
+            userVM = userViewModel,
+            onLogin = { navController.navigate(
+                Login
+            )}
+        ) }
         composable<Settings> { SettingsScreen(i18n = i18n) }
         composable<Help> { HelpScreen(i18n = i18n) }
         composable<Login> {
@@ -73,9 +84,13 @@ fun SSmokeNavigationScreen (
                         unm,
                         pass,
                         {
-                            val b = navController.popBackStack()
+                            Log.v("NAV STATE before", "${navController.currentDestination?.route}")
+                            var b = navController.popBackStack()
+                            Log.v("NAV STATE after", "${navController.currentDestination?.route}")
+                            b = navController.popBackStack()
+                            Log.v("NAV STATE after", "${navController.currentDestination?.route}")
                             Log.v("usermodel.login:"," navcontroller: popbackstack: ${b}")
-                            Log.v("", "After success: user = $userViewModel.userState.value")
+                            Log.v("", "After success: user = ${userViewModel.user.username}")
                         })
                 },
                 onNewAccount = { navController.navigate(NewAccount) })
@@ -84,13 +99,16 @@ fun SSmokeNavigationScreen (
         composable<NewAccount> { NewAccountScreen(i18n = i18n) }
     }
 
-    Log.d("Nav. controller", "Is user logged: ${userViewModel.userState.value.isLogged}")
-    if (! userViewModel.userState.value.isLogged) {
-        navController.navigate(Login)
-    } else {
-        navController.clearBackStack(Home)  //?????
+//    Log.d("Nav. controller", "Is user logged: ${userViewModel.userState.value.isLogged}")
+//    if (! userViewModel.userState.value.isLogged) {
+//        navController.navigate(Login)
+////        navController.navigate(Home)
+////    } else {
+////        navController.clearBackStack(Home)  //?????
+//    } else {
+//        Log.v("nav controller", "Route: ${route}")
         navController.navigate (route)
-    }
+//    }
 
 
 }

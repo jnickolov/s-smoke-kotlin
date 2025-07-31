@@ -2,25 +2,20 @@ package eu.efficientsoft.lpl.ssmoke.mobileapp
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.Firebase
-import com.google.firebase.messaging.messaging
+import androidx.navigation.compose.rememberNavController
+import eu.efficientsoft.lpl.ssmoke.mobileapp.app.Events
 import eu.efficientsoft.lpl.ssmoke.mobileapp.app.SSmokeApp
 import eu.efficientsoft.lpl.ssmoke.mobileapp.data.DataStoreRepository
 import eu.efficientsoft.lpl.ssmoke.mobileapp.data.createDataStore
 import eu.efficientsoft.lpl.ssmoke.mobileapp.data.dataStoreRepository
-import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeAppStatusViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeEventsViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeI18nViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.theme.SSmokeMobileAppTheme
-import eu.efficientsoft.lpl.ssmoke.mobileapp.util.ToastManager
 
 
 class MainActivity : ComponentActivity() {
@@ -52,12 +47,31 @@ class MainActivity : ComponentActivity() {
                     //i18nViewModel.loadI18n()
                     Log.v("LAUNCHED EFFECT", "I18N key changed: ${i18nViewModel.lang}")
                 }
+                val navController = rememberNavController()
                 SSmokeApp(
+                    navController,
                     i18nViewModel,
                     userViewModel,
-                    eventsViewModel)
+                    eventsViewModel,
+                    onPageSelected = { this::initPage }
+                    )
             }
 
+        }
+    }
+
+    fun initPage (page: Any) {
+        Log.v("INIT PAGE:", "page = ${page}")
+        when (page) {
+            //Login ->
+            Events -> {
+                Log.v("", "Attempt to load events")
+                if (userViewModel.isUserLogged()) {
+                    eventsViewModel.loadEvents(userViewModel.user.username!!)
+                } else {
+
+                }
+            }
         }
     }
 

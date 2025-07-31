@@ -3,6 +3,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -157,25 +160,42 @@ fun ClosedEventCard (e: SSmokeEvent) {
 @Composable fun EventsScreen(
     i18n: I18n?,
     eventsVM: SSmokeEventsViewModel,
-    user: SSmokeUserState
+    userVM: SSmokeUserViewModel,
+    onLogin: () ->Unit
 ) {
     val events by remember { eventsVM.events }
     val reloadEvents by remember { eventsVM.loadEvents }
+    val loadingEvents by remember { eventsVM.loading }
 
-    LaunchedEffect(user) {
-        user.username?.let {
-            eventsVM.loadEvents(user.username)
-        }
+//    LaunchedEffect(user) {
+//        user.username?.let {
+//            eventsVM.loadEvents(user.username)
+//        }
+//    }
+
+    if (! userVM.isUserLogged()) {
+        onLogin()
     }
+    //eventsVM.loadEvents(userVM.user.username!!)
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-        .padding(0.dp)
-        .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top,
-    ) {
-        events.forEach { e->
-            EventView (e)
+    if (loadingEvents) {
+//        CircularProgressIndicator(modifier = Modifier.fillMaxSize(hor))
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(0.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top,
+        ) {
+            events.forEach { e ->
+                EventView(e)
+            }
         }
     }
 }

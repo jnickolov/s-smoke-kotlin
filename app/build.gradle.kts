@@ -25,6 +25,15 @@ android {
             useSupportLibrary = true
         }
     }
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
+    kotlin {
+        jvmToolchain(21)
+    }
+
 
     buildTypes {
         release {
@@ -67,7 +76,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx:24.1.2")
     implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
 
-    val navVersion = "2.9.2"
+    val navVersion = "2.9.3"
 
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
@@ -85,15 +94,15 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2025.07.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //K-tor
-    val ktorVersion = "3.2.2"
+    val ktorVersion = "3.2.3"
     implementation("io.ktor:ktor-client-android:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
@@ -112,7 +121,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.7")
     implementation ("androidx.savedstate:savedstate-ktx:1.3.1")
     implementation("org.jetbrains.kotlin:atomicfu:2.2.0")
-
 
 
 
