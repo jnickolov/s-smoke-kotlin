@@ -122,3 +122,18 @@ data class DetectorGroupNamingDto (
 data class CommandDto (
     val command_id: Int
 )
+
+//@Serializable
+//data class SensorNnamingDto {
+//    var mac: String,
+//    var name: String,
+//    var info: String) {
+//}
+
+//@Serializable
+//data class DetectorGroupNamingDto (
+//    val detectorId: Int,
+//    val name: String,
+//    val info: String,
+//    val sensors: MutableList<SensorNamingDto>
+//)
