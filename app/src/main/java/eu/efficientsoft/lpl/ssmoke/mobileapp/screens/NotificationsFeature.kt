@@ -79,34 +79,6 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
-            Text(text = "Получаване на системни съобщения")
-
-            Switch(
-                modifier = Modifier.semantics { contentDescription = "Demo with icon" },
-                checked = checked2,
-                onCheckedChange = {
-                    checked2 = it
-                    if (it) {onMessageSelected()}
-                    else {onMessageDeselected()}
-                },
-                thumbContent = {
-                    if (checked2) {
-                        // Icon isn't focusable, no need for content description
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = null,
-                            modifier = Modifier.size(SwitchDefaults.IconSize),
-                        )
-                    }
-                }
-            )
-        }
-        Row (
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-
-        ) {
             Text(text = "Получаване на съобщения за аларми")
 
             Switch(
@@ -129,5 +101,40 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
                 }
             )
         }
+//        Text("Регистрирани на това устройство")
+//        Text (userVM.alarmSubscribedUsers.replace("|", ", "))
+
+HorizontalDivider()
+        Row (
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+
+        ) {
+            Text(text = "Получаване на системни съобщения")
+
+            Switch(
+                modifier = Modifier.semantics { contentDescription = "Demo with icon" },
+                checked = checked2,
+                onCheckedChange = {
+                    checked2 = it
+                    if (it) {onMessageSelected()}
+                    else {onMessageDeselected()}
+                },
+                thumbContent = {
+                    if (checked2) {
+                        // Icon isn't focusable, no need for content description
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                }
+            )
+        }
+//        Text("Регистрирани на това устройство")
+//        Text (userVM.messageSubscribedUsers.replace("|", ", "))
+
     }
 }

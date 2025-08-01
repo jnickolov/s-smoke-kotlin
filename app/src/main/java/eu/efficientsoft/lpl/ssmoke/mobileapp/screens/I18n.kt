@@ -8,6 +8,7 @@ class I18n (val code: String, val props: Map<String, String>) {
 }
 
 val i18nBg_preloaded: I18n = I18n (code="bg", props = mapOf(
+    "m_mnu_fire_alarms" to "Пожарни аларми",
     "m_acc_info" to "Информация",
     "m_alarm" to "\"Събитие\"",
     "m_available_unm" to "Потребителското име може да се използва",

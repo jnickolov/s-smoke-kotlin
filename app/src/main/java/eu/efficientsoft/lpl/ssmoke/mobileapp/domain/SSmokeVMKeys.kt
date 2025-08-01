@@ -13,6 +13,12 @@ interface SSmokeVMKeys {
     val userKey: String
         get() = "user"
 
+    val subscribedForAlarmsKey: String
+        get() = "subscribedForAlarms"
+
+    val subscribedForMessagesKey: String
+        get() = "subscribedForMessages"
+
     val userDBKey: Preferences.Key<String>
         get() = stringPreferencesKey(userKey)
 
@@ -21,5 +27,10 @@ interface SSmokeVMKeys {
 
     val usernameDBKey: Preferences.Key<String>
         get() = stringPreferencesKey(userKey)
+
+    val subscribedForAlarmsDBKey: Preferences.Key<String>
+        get() = stringPreferencesKey(subscribedForAlarmsKey)
+    val subscribedForMessagesDBKey: Preferences.Key<String>
+        get() = stringPreferencesKey(subscribedForMessagesKey)
 
 }

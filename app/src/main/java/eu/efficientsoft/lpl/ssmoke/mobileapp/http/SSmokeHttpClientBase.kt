@@ -35,8 +35,17 @@ val namingPath = "/api/pro/detector-naming/v1"
 //    return SSmokeHttpClientBase.createHttpClient();
 //}
 
-open class SSmokeHttpClientBase {
-    protected val httpClient = createHttpClient();
+interface HttpClientSupplier {
+    fun httpClient() : HttpClient;
+}
+
+open class SSmokeHttpClientBase : HttpClientSupplier {
+    protected val _httpClient = createHttpClient();
+    val httpClient = _httpClient;
+
+    override fun httpClient() : HttpClient {
+        return httpClient
+    }
 
     protected fun <T>resolveResult (status: Int, body: T) : Result<T, NetworkError> {
         return when (status) {

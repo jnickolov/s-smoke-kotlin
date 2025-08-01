@@ -1,5 +1,6 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.util
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import eu.efficientsoft.lpl.ssmoke.mobileapp.http.resetCommandConnector
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +33,7 @@ fun ToastMessage(
     val toastMessage by ToastManager.toastMessage.collectAsState()
     val showMessage by ToastManager.showMessage.collectAsState()
     val isSuccess by ToastManager.isSuccess.collectAsState()
+    val detectorId by ToastManager.detectorId.collectAsState()
 
     if (showMessage) {
         val backgroundColor = if (isSuccess) {
@@ -68,9 +71,21 @@ fun ToastMessage(
             )
             Text(text = toastMessage, modifier=Modifier.clickable(
                 onClick = {
+                    Log.v("Text clicked", "Exec fnc: ${detectorId}")
+                    ToastManager.exec (detectorId)
                     ToastManager.hideToast()
                 }
             ))
+        }
+    }
+}
+
+private fun ToastManager.exec(detectorId: Int) {
+    when (detectorId) {
+        0 -> Log.v("ToastManager","RESET CMD: 0")
+        else -> {
+            Log.v("ToastManager","RESET CMD: ${detectorId}")
+            resetCommandConnector.sendReset(detectorId);
         }
     }
 }
@@ -85,7 +100,17 @@ object ToastManager {
     private val _isSuccess = MutableStateFlow(true)
     val isSuccess: StateFlow<Boolean> = _isSuccess
 
-    fun showToast(message: String, isSuccess: Boolean) {
+    private val _commandCode = MutableStateFlow(0)
+    val detectorId: StateFlow<Int> = _commandCode
+    
+    fun showToast(message: String, isSuccess: Boolean, commandCode: Int = 0) {
+        _toastMessage.update { message }
+        _isSuccess.update { isSuccess }
+        _showMessage.update { true }
+        _commandCode.update { commandCode }
+    }
+
+    fun showToastWithButton(message: String, isSuccess: Boolean) {
         _toastMessage.update { message }
         _isSuccess.update { isSuccess }
         _showMessage.update { true }

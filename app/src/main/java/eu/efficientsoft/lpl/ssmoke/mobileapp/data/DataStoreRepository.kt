@@ -54,15 +54,14 @@ class DataStoreRepository(
         saveString(key = userDBKey, value = name)
         saveString(key = usernameDBKey, value = username)
     }
-
     suspend fun loadUser(action: (String, String) -> Unit) {
         //dataStoreRepository: DataStoreRepository) {
-        Log.v("MVVM", "CVM: loading value from DataStore: ")
+        // Log.v("MVVM", "CVM: loading value from DataStore: ")
         var newName: String? = null
         var newUsername: String? = null
 
         withContext (Dispatchers.IO) {
-           dataStoreRepository.readString(userDBKey)
+            dataStoreRepository.readString(userDBKey)
                 .collectLatest {
                     newName = it
                 }
@@ -79,4 +78,29 @@ class DataStoreRepository(
             }
         }
     }
+
+    suspend fun saveRegsteredForNotifications (alarmUsers: String, messageUsers: String) {
+        saveString (subscribedForAlarmsDBKey, alarmUsers)
+        saveString (subscribedForMessagesDBKey, messageUsers)
+    }
+
+    suspend fun loadRegisteredForNotifications (onLoad: (String, String) -> Unit) {
+        var alarmUsers: String? = null
+        var messageUsers: String? = null
+
+        withContext (Dispatchers.IO) {
+            dataStoreRepository.readString(subscribedForAlarmsDBKey)
+                .collectLatest {
+                    alarmUsers = it
+                }
+            dataStoreRepository.readString(subscribedForMessagesDBKey)
+                .collectLatest {
+                    messageUsers = it
+                }
+            if (alarmUsers == null) alarmUsers = ""
+            if (messageUsers== null) messageUsers = ""
+            onLoad (alarmUsers, messageUsers)
+        }
+    }
+
 }

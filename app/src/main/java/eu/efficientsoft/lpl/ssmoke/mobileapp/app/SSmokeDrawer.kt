@@ -35,6 +35,7 @@ private data class NavigationData (val id: Any, val label: String, val descripti
 
 private val navItems = listOf(
     NavigationData (Events, label = "m_mnu_reports", description = "m_mnu_reports_hint", onClick = { Log.i("Navigation click","Events"); }),
+    NavigationData (FireAlarms, label = "m_mnu_fire_alarms", description = "m_mnu_fire_alarms", onClick = { Log.i("Navigation click","Fire alarms"); }),
     //null,
     //NavigationData (Devices, label = "m_mnu_detector", description = "m_mnu_detector_hint", onClick = { Log.i("Navigation click","Detectors")}),
     NavigationData (Notifications, label = "m_mnu_fcm", description = "m_mnu_fcm_hint", onClick = { Log.i("Navigation click","Messages")}),

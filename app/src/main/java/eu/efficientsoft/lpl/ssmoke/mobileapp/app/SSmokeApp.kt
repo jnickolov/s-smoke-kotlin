@@ -29,14 +29,16 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.util.ToastMessage
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-@Serializable
-object Home
+//@Serializable
+//object Home
 @Serializable
 object Devices
 @Serializable
 object Notifications
 @Serializable
 object Events
+@Serializable
+object FireAlarms
 @Serializable
 object Profile
 @Serializable
@@ -54,7 +56,7 @@ fun SSmokeApp(
     userViewModel: SSmokeUserViewModel,
     eventsViewModel: SSmokeEventsViewModel
     ) {
-    val pageRoute: MutableState<Any> = remember { mutableStateOf(Home) }
+    val pageRoute: MutableState<Any> = remember { mutableStateOf(FireAlarms) }
 
     val i18n by i18nViewModel.i18n.collectAsState()
     val lang = i18nViewModel.lang

@@ -11,7 +11,7 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeUserViewModel
 import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.DevicesScreen
 import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.EventsScreen
 import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.HelpScreen
-import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.HomeScreen
+import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.FireAlarmScreen
 import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.I18n
 import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.LoginScreen
 import eu.efficientsoft.lpl.ssmoke.mobileapp.screens.NewAccountScreen
@@ -33,7 +33,7 @@ fun SSmokeNavigationScreen (
 ) {
     val navController = rememberNavController()
 
-//    fun toLoginScreen() {
+    //    fun toLoginScreen() {
 //        Log.v("NAV", "to login screen")
 //        navController.navigate(Login)
 //    }
@@ -48,19 +48,28 @@ fun SSmokeNavigationScreen (
     @Composable
     fun showToast(string: String) {
         //Toast.makeText(LocalContext.current, "Неуспешен логин. Опитайте пак", Toast.LENGTH_LONG).show()
-        ToastManager.showToast("Неуспешен логин. Опитайте пак", false)
+        ToastManager.showToast("Неуспешен логин. Опитайте пак", isSuccess = false)
     }
 
-    NavHost(navController = navController, startDestination = Home) {
-        composable<Home> { HomeScreen(eventsVM = eventsViewModel, userVM = userViewModel) }
+    NavHost(navController = navController, startDestination = FireAlarms) {
+        composable<FireAlarms> { FireAlarmScreen(eventsVM = eventsViewModel, userVM = userViewModel) }
         composable<Devices> { DevicesScreen(i18n = i18n) }
-        composable<Notifications> { NotificationsScreen(i18n = i18n, userVM = userViewModel,
-            onAlarmSelected = { userViewModel.registerForAlarms() },
-            onAlarmDeselected = { userViewModel.unregisterForAlarms() },
-            onMessageSelected = { userViewModel.registerForMessages() },
-            onMessageDeselected = { userViewModel.unregisterForMessages() },
-            ) }
-        composable<Events> { EventsScreen(i18n = i18n, user = userViewModel.user, eventsVM = eventsViewModel) }
+        composable<Notifications> {
+            NotificationsScreen(
+                i18n = i18n, userVM = userViewModel,
+                onAlarmSelected = { userViewModel.registerForAlarms() },
+                onAlarmDeselected = { userViewModel.unregisterForAlarms() },
+                onMessageSelected = { userViewModel.registerForMessages() },
+                onMessageDeselected = { userViewModel.unregisterForMessages() },
+            )
+        }
+        composable<Events> {
+            EventsScreen(
+                i18n = i18n,
+                user = userViewModel.user,
+                eventsVM = eventsViewModel
+            )
+        }
         composable<Settings> { SettingsScreen(i18n = i18n) }
         composable<Help> { HelpScreen(i18n = i18n) }
         composable<Login> {
@@ -74,7 +83,7 @@ fun SSmokeNavigationScreen (
                         pass,
                         {
                             val b = navController.popBackStack()
-                            Log.v("usermodel.login:"," navcontroller: popbackstack: ${b}")
+                            Log.v("usermodel.login:", " navcontroller: popbackstack: ${b}")
                             Log.v("", "After success: user = $userViewModel.userState.value")
                         })
                 },
@@ -85,13 +94,11 @@ fun SSmokeNavigationScreen (
     }
 
     Log.d("Nav. controller", "Is user logged: ${userViewModel.userState.value.isLogged}")
-    if (! userViewModel.userState.value.isLogged) {
+    if (!userViewModel.userState.value.isLogged) {
         navController.navigate(Login)
     } else {
-        navController.clearBackStack(Home)  //?????
-        navController.navigate (route)
+        navController.clearBackStack(FireAlarms)  //?????
+        navController.navigate(route)
     }
-
-
 }
 

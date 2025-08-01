@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import eu.efficientsoft.lpl.ssmoke.mobileapp.http.DetectorGroupNamingDto
 import eu.efficientsoft.lpl.ssmoke.mobileapp.http.EventHttpConnector
 import eu.efficientsoft.lpl.ssmoke.mobileapp.http.EventNamingDto
+import eu.efficientsoft.lpl.ssmoke.mobileapp.http.resetCommandConnector
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.ToastManager
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.onError
 import eu.efficientsoft.lpl.ssmoke.mobileapp.util.onSuccess
@@ -29,15 +30,16 @@ class SSmokeEventsViewModel: ViewModel() {
             loadingEvents.value = true;
             val res = eventHttpConnector.loadEventsForUser(username)
             loadingEvents.value = false;
-            res.onSuccess { it ->
+            res
+            .onSuccess { it ->
                 events.value = it
             }
-                .onError {
-                    ToastManager.showToast(
-                        message = "Проблем с връзката. Опитайте отново.",
-                        isSuccess = false
-                    )
-                }
+            .onError {
+                ToastManager.showToast(
+                    message = "Проблем с връзката. Опитайте отново.",
+                    isSuccess = false
+                )
+            }
         }
     }
 
@@ -51,12 +53,17 @@ class SSmokeEventsViewModel: ViewModel() {
                 Log.v("", "Fire events: size = ${it.size}")
                 it.forEach { e-> Log.v("", "${e.toString()}") }
             }
-                .onError {
-                    ToastManager.showToast(
-                        message = "Проблем с връзката. Опитайте отново.",
-                        isSuccess = false
-                    )
-                }
+            .onError {
+                ToastManager.showToast(
+                    message = "Проблем с връзката. Опитайте отново.",
+                    isSuccess = false
+                )
+            }
         }
+    }
+
+    fun resetDetector (detectorId: Int) {
+        Log.v("RESER COMMAND", "DETECTOR ID = $detectorId")
+        val res = resetCommandConnector.sendReset(detectorId)
     }
 }
