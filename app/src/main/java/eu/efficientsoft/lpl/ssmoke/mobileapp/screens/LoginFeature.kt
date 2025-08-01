@@ -1,5 +1,6 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.widgets.PasswordField
@@ -42,6 +50,8 @@ fun LoginScreen (
     var userName by remember { mutableStateOf("") }
     var pass by remember { mutableStateOf("") }
 
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,16 +63,44 @@ fun LoginScreen (
         fontSize = LocalTextStyle.current.fontSize * 1.75,
     )
         Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField (value = userName, label = { Text("User name") }, placeholder = { Text("User name") }, onValueChange = { userName = it })
+        OutlinedTextField (
+            value = userName,
+            label = { Text("User name") },
+            placeholder = { Text("User name") },
+            singleLine = true,
+            modifier = Modifier
+                .onPreviewKeyEvent {
+                    if (it.type == KeyEventType.KeyUp && (it.key == Key.Tab || it.key == Key.Enter)) {
+                        focusManager.moveFocus(FocusDirection.Next)
+                        true
+                    } else {
+                        false
+                    }
+                },
+            onValueChange = { userName = it })
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PasswordField (modifier = Modifier, password = pass, onChange = { pass = it })
+        PasswordField (
+            modifier = Modifier
+                .onPreviewKeyEvent {
+                    if (it.type == KeyEventType.KeyUp && (it.key == Key.Tab || it.key == Key.Enter)) {
+                        //focusManager.moveFocus(FocusDirection.Next)
+                        Log.v("FROM PWD FIELD","GO TO LOGIN BUTTON: $userName/$pass")
+                        onLogin (userName.trim(), pass.trim())
+                        true
+                    } else {
+                        false
+                    }
+                },
+
+            password = pass,
+            onChange = { pass = it })
 
         Spacer(modifier = Modifier.height(16.dp))
 
         ElevatedButton (onClick = {
-            onLogin (userName, pass);
+            onLogin (userName, pass)
         }) {
             Text(text = " Login ")
         }

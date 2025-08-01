@@ -25,6 +25,7 @@ data class SSmokeUserState (
     val username: String? = null,
     val name: String? = null,
     val isLogged: Boolean = false,
+    val timestamp: Long = 0L
     //val loginAttemptStatus: Boolean = true
 )
 

@@ -16,8 +16,10 @@ class PushNotificationService : FirebaseMessagingService () {
         super.onMessageReceived(msg)
         val s = "${msg.data.get("title")}\n${msg.data.get("message")}"
         val data = msg.data;
-        val detectorId = data["detectorId"]?.toInt()?:0
-        ToastManager.showToast(s, false, detectorId);
+        val eventCode = data["code"]?.toInt() ?: 0
+        val commandCode = if (eventCode == 100) 101 else 0
+        val detectorId = data["detectorId"]?.toInt() ?: 0
+        ToastManager.showToast(s, false, commandCode = commandCode, detectorId =detectorId);
         Log.v("FCM", "Message from: ${msg.toString()}")
         Log.v("FCM", "DATA length: ${data.size}")
         data.forEach { k, v ->

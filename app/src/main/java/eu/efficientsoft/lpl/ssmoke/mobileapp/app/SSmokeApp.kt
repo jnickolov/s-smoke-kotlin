@@ -67,15 +67,15 @@ fun SSmokeApp(
     LaunchedEffect(lang) {
         //Log.d("LAUNCH EFFECT", "Lang: $lang, wait 3000")
         //TODO: select real language
-//        if (lang != null) {
-//            //i18nViewModel.saveInDataStore()
-//            i18nViewModel.loadI18n(lang)
-//        }
+        if (lang != null) {
+            i18nViewModel.saveInDataStore()
+            i18nViewModel.loadI18n(lang)
+        }
     }
 
     Scaffold(
         topBar = {
-            SSmokeTopBar(
+            SSmokeTopBar(userViewModel.user.name ?: "S-Smoke",
                 onMenuClick = {
                     Log.i("Navigation Menu Button", "Opening drawer")
                     scope.launch { drawerState.open() }

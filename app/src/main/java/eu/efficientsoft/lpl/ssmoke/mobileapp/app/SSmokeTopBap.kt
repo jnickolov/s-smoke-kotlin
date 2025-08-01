@@ -18,7 +18,10 @@ import eu.efficientsoft.lpl.ssmoke.mobileapp.ui.theme.LPLBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SSmokeTopBar(onMenuClick: () -> Unit, onActionClick: () -> Unit) {
+fun SSmokeTopBar(
+    title: String,
+    onMenuClick: () -> Unit,
+    onActionClick: () -> Unit) {
 
     val ssmokeBlue = LPLBlue; //Color(0x78, 0x96, 0xcc)
     val ssmokeColors  = TopAppBarDefaults.topAppBarColors(
@@ -29,7 +32,7 @@ fun SSmokeTopBar(onMenuClick: () -> Unit, onActionClick: () -> Unit) {
     )
 
     TopAppBar(
-        title = { Text(fontWeight = FontWeight.Bold, text = "  S-Smoke") },
+        title = { Text(fontWeight = FontWeight.Bold, text = "  $title") },
         colors = ssmokeColors,
         navigationIcon = {
             IconButton(onClick = onMenuClick) {

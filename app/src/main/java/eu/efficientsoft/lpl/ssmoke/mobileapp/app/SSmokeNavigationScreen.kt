@@ -82,9 +82,15 @@ fun SSmokeNavigationScreen (
                         unm,
                         pass,
                         {
-                            val b = navController.popBackStack()
-                            Log.v("usermodel.login:", " navcontroller: popbackstack: ${b}")
-                            Log.v("", "After success: user = $userViewModel.userState.value")
+                            navController.run {
+                                clearBackStack(FireAlarms)  //?????
+                                navigate(FireAlarms)
+                            }
+//                            val b = navController.popBackStack(
+//                                route = FireAlarms,
+//                                inclusive = false)
+//                            Log.v("usermodel.login:", " navcontroller: popbackstack: ${b}")
+                            Log.v("Must be on FireAlarms", "After success: user = $userViewModel.userState.value")
                         })
                 },
                 onNewAccount = { navController.navigate(NewAccount) })
@@ -97,8 +103,12 @@ fun SSmokeNavigationScreen (
     if (!userViewModel.userState.value.isLogged) {
         navController.navigate(Login)
     } else {
+        // TODO: !!! make difference bbetween menu command and re-login case!!!
         navController.clearBackStack(FireAlarms)  //?????
-        navController.navigate(route)
+        if (route != Login)
+            navController.navigate(route)
+        else
+            navController.navigate(Login)
     }
 }
 

@@ -25,6 +25,8 @@ class SSmokeEventsViewModel: ViewModel() {
     val events = _eventListState
     val fireEvents = _eventFireAlarmsState
 
+    val counter = mutableStateOf (0);
+
     fun loadEvents(username: String) {
         viewModelScope.launch {
             loadingEvents.value = true;

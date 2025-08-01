@@ -33,6 +33,7 @@ fun ToastMessage(
     val toastMessage by ToastManager.toastMessage.collectAsState()
     val showMessage by ToastManager.showMessage.collectAsState()
     val isSuccess by ToastManager.isSuccess.collectAsState()
+    val commandCode by ToastManager.commandCode.collectAsState()
     val detectorId by ToastManager.detectorId.collectAsState()
 
     if (showMessage) {
@@ -52,7 +53,7 @@ fun ToastMessage(
         val contentDescription = if (isSuccess) "Success icon" else "Error icon"
 
         LaunchedEffect(showMessage) {
-            if (showMessage) {
+            if (showMessage && commandCode != 101) {
                 delay(30000) // Hide after 30 seconds
                 ToastManager.hideToast()
             }
@@ -71,8 +72,8 @@ fun ToastMessage(
             )
             Text(text = toastMessage, modifier=Modifier.clickable(
                 onClick = {
-                    Log.v("Text clicked", "Exec fnc: ${detectorId}")
-                    ToastManager.exec (detectorId)
+                    Log.v("Text clicked", "Exec fnc: ${commandCode} -> ${detectorId}")
+                    ToastManager.exec (commandCode, detectorId)
                     ToastManager.hideToast()
                 }
             ))
@@ -80,14 +81,16 @@ fun ToastMessage(
     }
 }
 
-private fun ToastManager.exec(detectorId: Int) {
-    when (detectorId) {
-        0 -> Log.v("ToastManager","RESET CMD: 0")
-        else -> {
-            Log.v("ToastManager","RESET CMD: ${detectorId}")
-            resetCommandConnector.sendReset(detectorId);
-        }
-    }
+private fun ToastManager.exec(commandCode: Int, detectorId: Int) {
+//    if (commandCode == 101) {
+//        when (detectorId) {
+//            0 -> Log.v("ToastManager", "RESET CMD: 0")
+//            else -> {
+//                Log.v("ToastManager", "RESET CMD: ${detectorId}")
+//                resetCommandConnector.sendReset(detectorId);
+//            }
+//        }
+//    }
 }
 
 object ToastManager {
@@ -101,19 +104,16 @@ object ToastManager {
     val isSuccess: StateFlow<Boolean> = _isSuccess
 
     private val _commandCode = MutableStateFlow(0)
-    val detectorId: StateFlow<Int> = _commandCode
-    
-    fun showToast(message: String, isSuccess: Boolean, commandCode: Int = 0) {
+    private val _detectorId = MutableStateFlow(0)
+    val commandCode: StateFlow<Int> = _commandCode
+    val detectorId: StateFlow<Int> = _detectorId
+
+    fun showToast(message: String, isSuccess: Boolean, commandCode: Int = 0, detectorId: Int = 0) {
         _toastMessage.update { message }
         _isSuccess.update { isSuccess }
         _showMessage.update { true }
         _commandCode.update { commandCode }
-    }
-
-    fun showToastWithButton(message: String, isSuccess: Boolean) {
-        _toastMessage.update { message }
-        _isSuccess.update { isSuccess }
-        _showMessage.update { true }
+        _detectorId.update { detectorId }
     }
 
     fun hideToast() {

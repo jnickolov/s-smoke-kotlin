@@ -1,4 +1,5 @@
 package eu.efficientsoft.lpl.ssmoke.mobileapp.screens
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -13,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.efficientsoft.lpl.ssmoke.mobileapp.R
 import eu.efficientsoft.lpl.ssmoke.mobileapp.domain.SSmokeEventsViewModel
@@ -164,7 +167,8 @@ fun ClosedEventCard (e: SSmokeEvent) {
     val events by eventsVM.events
     //val reloadEvents by remember { eventsVM.loadEvents }
 
-    LaunchedEffect(user) {
+    LaunchedEffect(user, eventsVM.counter) {
+        Log.v("LAUNCH EVENTS", "LOADING EVENTS")
         user.username?.let {
             eventsVM.loadEvents(user.username)
         }
@@ -184,6 +188,17 @@ fun ClosedEventCard (e: SSmokeEvent) {
                 CircularProgressIndicator()
             }
         } else {
+            ElevatedButton(onClick = {
+                Log.v("CHECK Events AGAIN", "CHECK Events AGAIN")
+                eventsVM.counter.value ++;
+                eventsVM.run { loadEvents(user.username!!) }
+            }) {
+                Text(text ="Проверте отново",
+                    textAlign = TextAlign.Right,
+                    fontWeight = FontWeight.Bold, color = Color.Magenta, modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                )
+            }
+
             events.forEach { e->
                 EventView (e)
             }

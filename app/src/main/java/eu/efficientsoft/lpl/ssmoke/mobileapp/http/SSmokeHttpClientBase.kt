@@ -14,8 +14,8 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-//val serverHost = "http://s-smoke.com:8088"
-val serverHost = "http://10.0.2.2:8088"
+val serverHost = "http://s-smoke.com:8088"
+//val serverHost = "http://10.0.2.2:8088"
 
 val userPath = "/api/m/v1/users"
 val loginPath = "/api/m/v1/login"
